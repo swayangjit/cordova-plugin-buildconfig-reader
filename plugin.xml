@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    id="cordova-plugin-buildconfig-reader"
+    version="0.0.1">
+    <name>A native  plugin to read BuildConfig file</name>
+    <description></description>
+    <license>MIT</license>
+    <keywords></keywords>
+    <js-module src="www/plugin.js" name="BUILDCONFIGREADER">
+        <clobbers target="buildconfigreader" />
+    </js-module>
+    
+    <!-- android -->
+    <platform name="android">
+
+      <config-file target="res/xml/config.xml" parent="/*">
+        <feature name="buildconfigreader">
+          <param name="android-package" value="org.sunbird.config.BuildConfigReaderPlugin" />
+          <param name="onload" value="true" />
+        </feature>
+      </config-file>
+      <source-file src="src/android/org/sunbird/config/BuildConfigReaderPlugin.java" target-dir="src/org/sunbird/config" />
+      <source-file src="src/android/org/sunbird/config/ReflectionUtil.java" target-dir="src/org/sunbird/config" />
+
+    </platform>
+
+    <platform name="browser">
+        <config-file target="config.xml" parent="/*">
+            <feature name="DB">
+                <param name="browser-package" value="BUILDCONFIGREADER" />
+            </feature>
+        </config-file>
+        <js-module src="src/browser/DBProxy.js" name="DBProxy">
+            <runs/>
+        </js-module>
+    </platform>
+</plugin>
+
