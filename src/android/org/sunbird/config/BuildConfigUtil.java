@@ -1,6 +1,5 @@
-package org.ekstep.genieservices.utils;
+package org.sunbird.config;
 
-import org.ekstep.genieservices.commons.utils.ReflectionUtil;
 
 /**
  * Created on 4/18/2017.
