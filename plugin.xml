@@ -21,6 +21,8 @@
       </config-file>
       <source-file src="src/android/org/sunbird/config/BuildConfigReaderPlugin.java" target-dir="src/org/sunbird/config" />
       <source-file src="src/android/org/sunbird/config/ReflectionUtil.java" target-dir="src/org/sunbird/config" />
+      <source-file src="src/android/org/sunbird/config/FileUtil.java" target-dir="src/org/sunbird/config" />
+      <source-file src="src/android/org/sunbird/config/BuildConfigUtil.java" target-dir="src/org/sunbird/config" />
 
     </platform>
 
