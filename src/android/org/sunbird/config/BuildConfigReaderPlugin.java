@@ -73,8 +73,8 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         String param = args.getString(1);
         String value;
         try {
-            value = BuildConfigUtil.getBuildConfigValue("org.sunbird.app", param);
-            callbackContext.success(value.toString());
+            value = BuildConfigUtil.getBuildConfigValue("org.sunbird.app", param).toString();
+            callbackContext.success(value);
         } catch (Exception e) {
             callbackContext.error(e.getMessage());
         }
