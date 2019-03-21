@@ -14,12 +14,14 @@ import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 
 /**
  * This class echoes a string called from JavaScript.
@@ -93,6 +95,17 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             callbackContext.error("Value Not found");
         }
 
+    }
+
+    public static void getBuildConfigValues(JSONArray args, CallbackContext callbackContext) throws JSONException {
+        String packageName = args.getString(0);
+        Class<?> clazz = getBuildConfigClass(packageName);
+        if(clazz == null) {
+            callbackContext.error("packageName, can not be null or empty.");
+        }
+        HashMap values = ReflectionUtil.getBuildConfigValues(clazz);
+        JSONObject jsonObject = new JSONObject(values);
+        callbackContext.success(jsonObject.toString());
     }
 
     private static int getIdOfResource(CordovaInterface cordova, String name, String resourceType) {
@@ -181,7 +194,11 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }else if (action.equalsIgnoreCase("exportApk")) {
             exportApk(cordova,callbackContext);
  
+        }else if (action.equalsIgnoreCase("getBuildConfigValues")) {
+
+            getBuildConfigValues(args,callbackContext);
         }
+
         return false;
     }
 }

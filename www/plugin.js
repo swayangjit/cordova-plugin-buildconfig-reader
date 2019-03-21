@@ -7,6 +7,9 @@ var buildconfigreader = {
     getBuildConfigValue(package, property, success, error) {
         exec(success, error, PLUGIN_NAME, "getBuildConfigValue", [package,property]);
     },
+    getBuildConfigValues(package, success, error) {
+        exec(success, error, PLUGIN_NAME, "getBuildConfigValues", [package]);
+    },
 
     rm(directoryPath, directoryToBeSkipped, success, error) {
         exec(success, error, PLUGIN_NAME, "rm", [directoryPath,directoryToBeSkipped]);
