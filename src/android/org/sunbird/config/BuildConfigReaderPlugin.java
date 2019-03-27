@@ -186,9 +186,6 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             checkAppAvailability(cordova, args, callbackContext);
 
         } else if (action.equalsIgnoreCase("getDownloadDirectoryPath")) {
-            checkAppAvailability(cordova, args, callbackContext);
-
-        } else if (action.equalsIgnoreCase("getDownloadDirectoryPath")) {
             getDownloadDirectoryPath(callbackContext);
 
         }else if (action.equalsIgnoreCase("exportApk")) {
