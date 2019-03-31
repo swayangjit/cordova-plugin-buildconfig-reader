@@ -32,6 +32,9 @@ var buildconfigreader = {
     },
     exportApk: function (onSuccess, onError) {
         exec(onSuccess, onError, PLUGIN_NAME, "exportApk", ["exportApk"]);
+    },
+    getDeviceSpec: function (onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "getDeviceSpec", ["getDeviceSpec"]);
     }
 };
 

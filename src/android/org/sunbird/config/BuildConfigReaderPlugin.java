@@ -28,6 +28,52 @@ import java.util.HashMap;
  */
 public class BuildConfigReaderPlugin extends CordovaPlugin {
 
+
+    @Override
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        if (action.equals("getBuildConfigValue")) {
+            this.getBuildConfigParam(args, callbackContext);
+            return true;
+        } else if (action.equals("rm")) {
+            try {
+                FileUtil.rm(new File(args.getString(0).replace("file://", "")), args.getString(1));
+                callbackContext.success();
+                return true;
+            } catch (Exception e) {
+                callbackContext.error("Error while deleting");
+                return false;
+            }
+        } else if (action.equalsIgnoreCase("openPlayStore")) {
+            String appId = args.getString(1);
+            openGooglePlay(cordova, appId);
+            callbackContext.success();
+
+        } else if (action.equalsIgnoreCase("getDeviceAPILevel")) {
+            getDeviceAPILevel(callbackContext);
+
+        } else if (action.equalsIgnoreCase("checkAppAvailability")) {
+            checkAppAvailability(cordova, args, callbackContext);
+
+        } else if (action.equalsIgnoreCase("getDownloadDirectoryPath")) {
+            getDownloadDirectoryPath(callbackContext);
+
+        }else if (action.equalsIgnoreCase("exportApk")) {
+            exportApk(cordova,callbackContext);
+
+        }else if (action.equalsIgnoreCase("getBuildConfigValues")) {
+
+            getBuildConfigValues(args,callbackContext);
+        }else if (action.equalsIgnoreCase("getDeviceSpec")) {
+            try {
+                callbackContext.success(new DeviceSpecGenerator().getDeviceSpec(cordova.getActivity()));
+            } catch (Exception e) {
+                callbackContext.error(e.getMessage());
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Open the appId details on Google Play .
      *
@@ -160,45 +206,5 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }
     }
 
-    @Override
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equals("getBuildConfigValue")) {
-            this.getBuildConfigParam(args, callbackContext);
-            return true;
-        } else if (action.equals("rm")) {
-            try {
-                FileUtil.rm(new File(args.getString(0).replace("file://", "")), args.getString(1));
-                callbackContext.success();
-                return true;
-            } catch (Exception e) {
-                callbackContext.error("Error while deleting");
-                return false;
-            }
-        } else if (action.equalsIgnoreCase("openPlayStore")) {
-            String appId = args.getString(1);
-            openGooglePlay(cordova, appId);
-            callbackContext.success();
 
-        } else if (action.equalsIgnoreCase("getDeviceAPILevel")) {
-            getDeviceAPILevel(callbackContext);
-
-        } else if (action.equalsIgnoreCase("checkAppAvailability")) {
-            checkAppAvailability(cordova, args, callbackContext);
-
-        } else if (action.equalsIgnoreCase("getDownloadDirectoryPath")) {
-            checkAppAvailability(cordova, args, callbackContext);
-
-        } else if (action.equalsIgnoreCase("getDownloadDirectoryPath")) {
-            getDownloadDirectoryPath(callbackContext);
-
-        }else if (action.equalsIgnoreCase("exportApk")) {
-            exportApk(cordova,callbackContext);
- 
-        }else if (action.equalsIgnoreCase("getBuildConfigValues")) {
-
-            getBuildConfigValues(args,callbackContext);
-        }
-
-        return false;
-    }
 }
