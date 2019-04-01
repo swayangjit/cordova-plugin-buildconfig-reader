@@ -16,7 +16,6 @@ import android.view.WindowManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.sunbird.support.DeviceSpec;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -42,10 +41,10 @@ public class DeviceSpecGenerator {
       String internalMemory = bytesToHuman(getTotalInternalMemorySize());
       deviceSpec.put("idisk", !TextUtils.isEmpty(internalMemory) ? internalMemory : -1);
 
-      String externalMemory = bytesToHuman(DeviceSpec.getTotalExternalMemorySize(activity));
+      String externalMemory = bytesToHuman(getTotalExternalMemorySize());
       deviceSpec.put("edisk", !TextUtils.isEmpty(externalMemory) ? externalMemory : -1);
 
-      String screenSize = DeviceSpec.getScreenInfoinInch(activity);
+      String screenSize = getScreenInfoinInch(activity);
       deviceSpec.put("scrn", !TextUtils.isEmpty(externalMemory) ? Double.valueOf(screenSize) : -1);
 
       String[] cameraInfo = getCameraInfo(activity);
@@ -79,6 +78,54 @@ public class DeviceSpecGenerator {
     } else {
       return Character.toUpperCase(first) + s.substring(1);
     }
+  }
+
+  private   boolean hasExternalSDCard() {
+    return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+  }
+
+  public  String getScreenInfoinInch(Context context) {
+    DisplayMetrics dm = new DisplayMetrics();
+    WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    wm.getDefaultDisplay().getMetrics(dm);
+    Integer[] coordinates = setRealDeviceSizeInPixels(wm);
+    double x = Math.pow(coordinates[0] / dm.xdpi, 2);
+    double y = Math.pow(coordinates[1] / dm.ydpi, 2);
+    double screenInches = Math.sqrt(x + y);
+    double roundOff = Math.round(screenInches * 100.0) / 100.0;
+    return String.valueOf(roundOff);
+  }
+
+  private   long getTotalExternalMemorySize() {
+    if (hasExternalSDCard()) {
+      File path = Environment.getExternalStorageDirectory();
+      StatFs stat = new StatFs(path.getPath());
+      long blockSize;
+      long totalBlocks;
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        blockSize = stat.getBlockSizeLong();
+        totalBlocks = stat.getBlockCountLong();
+      } else {
+        blockSize = stat.getBlockSize();
+        totalBlocks = stat.getBlockCount();
+      }
+      return totalBlocks * blockSize;
+    }
+    return 0;
+  }
+
+  public static int getScreenHeight(Context context) {
+    int height = 0;
+    WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    Display display = wm.getDefaultDisplay();
+    if (Build.VERSION.SDK_INT > 12) {
+      Point size = new Point();
+      display.getSize(size);
+      height = size.y;
+    } else {
+      height = display.getHeight();  // deprecated
+    }
+    return height;
   }
 
   private  Integer[] setRealDeviceSizeInPixels(WindowManager wm) {
