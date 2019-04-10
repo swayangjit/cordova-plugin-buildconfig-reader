@@ -208,13 +208,11 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             callbackContext.error("failure");
         }
     }
-
     private static void createDirectories( JSONArray args, CallbackContext callbackContext)  {
         try {
 
-            long start = System.currentTimeMillis();
-            String parentDirectory = args.getString(0);
-            String[] identifiers = toStringArray(args.getJSONArray(1));
+            String parentDirectory = args.getString(1);
+            String[] identifiers = toStringArray(args.getJSONArray(2));
             JSONObject jsonObject = new JSONObject();
             for (int i=0;i<identifiers.length;i++){
                 File f = new File(parentDirectory, identifiers[i]);
@@ -226,7 +224,6 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
                 jsonObject.put(identifiers[i], output);
             }
             callbackContext.success(jsonObject);
-            System.out.println("Time Taken to create directories"+ (System.currentTimeMillis()-start));
 
         } catch (Exception e) {
             callbackContext.success("false");
