@@ -35,6 +35,9 @@ var buildconfigreader = {
     },
     getDeviceSpec: function (onSuccess, onError) {
         exec(onSuccess, onError, PLUGIN_NAME, "getDeviceSpec", ["getDeviceSpec"]);
+    },
+    createDirectories: function (parentDirectory, identifiers,onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "createDirectories", ["createDirectories",parentDirectory,identifiers]);
     }
 };
 

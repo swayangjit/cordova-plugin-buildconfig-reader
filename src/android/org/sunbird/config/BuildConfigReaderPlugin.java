@@ -69,6 +69,9 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             } catch (Exception e) {
                 callbackContext.error(e.getMessage());
             }
+        }else if (action.equalsIgnoreCase("createDirectories")) {
+
+            createDirectories(args,callbackContext);
         }
 
         return false;
@@ -204,6 +207,31 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         } catch (Exception ex) {
             callbackContext.error("failure");
         }
+    }
+
+    private static void createDirectories( JSONArray args, CallbackContext callbackContext)  {
+        try {
+
+            long start = System.currentTimeMillis();
+            String parentDirectory = args.getString(0);
+            String[] identifiers = toStringArray(args.getJSONArray(1));
+            JSONObject jsonObject = new JSONObject();
+            for (int i=0;i<identifiers.length;i++){
+                File f = new File(parentDirectory, identifiers[i]);
+                if (!f.isDirectory()) {
+                    f.mkdirs();
+                }
+                JSONObject output = new JSONObject();
+                output.put("path","file://"+f.getPath());
+                jsonObject.put(identifiers[i], output);
+            }
+            callbackContext.success(jsonObject);
+            System.out.println("Time Taken to create directories"+ (System.currentTimeMillis()-start));
+
+        } catch (Exception e) {
+            callbackContext.success("false");
+        }
+
     }
 
 
