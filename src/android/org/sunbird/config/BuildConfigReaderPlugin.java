@@ -72,6 +72,9 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }else if (action.equalsIgnoreCase("createDirectories")) {
 
             createDirectories(args,callbackContext);
+        }else if (action.equalsIgnoreCase("writeFile")) {
+
+            writeFile(args,callbackContext);
         }
 
         return false;
@@ -226,7 +229,27 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             callbackContext.success(jsonObject);
 
         } catch (Exception e) {
-            callbackContext.success("false");
+            callbackContext.error("false");
+        }
+
+    }
+
+    private static void writeFile( JSONArray args, CallbackContext callbackContext)  {
+        try {
+
+            JSONArray mapList = args.getJSONArray(1);
+
+            for (int i=0;i<mapList.length();i++){
+                JSONObject jsonObject = mapList.getJSONObject(i);
+                String destinationPath = jsonObject.getString("path");
+                String fileName = jsonObject.getString("fileName");
+                String data = jsonObject.getString("data");
+                FileUtil.write(destinationPath, fileName, data);
+            }
+            callbackContext.success();
+
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
         }
 
     }
