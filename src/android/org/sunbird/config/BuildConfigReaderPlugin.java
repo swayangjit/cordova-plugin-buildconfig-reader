@@ -234,5 +234,12 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
 
     }
 
-
+    private static String[] toStringArray(JSONArray array) throws JSONException {
+        int length = array.length();
+        String[] values = new String[length];
+        for (int i = 0; i < length; i++) {
+            values[i] = array.getString(i);
+        }
+        return values;
+    }
 }
