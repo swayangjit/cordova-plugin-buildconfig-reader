@@ -223,7 +223,7 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
                     f.mkdirs();
                 }
                 JSONObject output = new JSONObject();
-                output.put("path","file://"+f.getPath());
+                output.put("path","file://"+f.getPath()+ "/");
                 jsonObject.put(identifiers[i], output);
             }
             callbackContext.success(jsonObject);
