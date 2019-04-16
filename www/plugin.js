@@ -4,14 +4,14 @@ var PLUGIN_NAME = 'buildconfigreader';
 
 var buildconfigreader = {
 
-    getBuildConfigValue(package, property, success, error) {
+    getBuildConfigValue: function(package, property, success, error) {
         exec(success, error, PLUGIN_NAME, "getBuildConfigValue", [package,property]);
     },
-    getBuildConfigValues(package, success, error) {
+    getBuildConfigValues: function(package, success, error) {
         exec(success, error, PLUGIN_NAME, "getBuildConfigValues", [package]);
     },
 
-    rm(directoryPath, directoryToBeSkipped, success, error) {
+    rm: function(directoryPath, directoryToBeSkipped, success, error) {
         exec(success, error, PLUGIN_NAME, "rm", [directoryPath,directoryToBeSkipped]);
     },
 
