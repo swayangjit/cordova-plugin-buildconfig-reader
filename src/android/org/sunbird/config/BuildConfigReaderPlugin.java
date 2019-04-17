@@ -75,6 +75,9 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }else if (action.equalsIgnoreCase("writeFile")) {
 
             writeFile(args,callbackContext);
+        }else if (action.equalsIgnoreCase("getMetaData")) {
+
+            getMetaData(args,callbackContext);
         }
 
         return false;
@@ -254,7 +257,7 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
 
     }
 
-    private static void getMetaData( JSONArray args, CallbackContext callbackContext)  {
+     private static void getMetaData( JSONArray args, CallbackContext callbackContext)  {
         try {
 
             JSONArray inputArray = args.getJSONArray(1);
