@@ -41,6 +41,9 @@ var buildconfigreader = {
     },
     writeFile: function (fileMapList,onSuccess, onError) {
         exec(onSuccess, onError, PLUGIN_NAME, "writeFile", ["writeFile",fileMapList]);
+    },
+    getMetaData: function (fileMapList,onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "getMetaData", ["getMetaData",fileMapList]);
     }
 };
 

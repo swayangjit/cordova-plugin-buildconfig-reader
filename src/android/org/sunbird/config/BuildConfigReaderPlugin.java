@@ -254,6 +254,28 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
 
     }
 
+    private static void getMetaData( JSONArray args, CallbackContext callbackContext)  {
+        try {
+
+            JSONArray inputArray = args.getJSONArray(1);
+            JSONObject jsonObject = new JSONObject();
+            for (int i=0;i<inputArray.length();i++){
+                JSONObject eachItem = inputArray.getJSONObject(i);
+                File f = new File(eachItem.getString("path"));
+
+                JSONObject output = new JSONObject();
+                output.put("size",FileUtil.getFileSize(f));
+                output.put("lastModifiedTime",f.lastModified());
+                jsonObject.put(eachItem.getString("identifier"), output);
+            }
+            callbackContext.success(jsonObject);
+
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+
+    }
+
     private static String[] toStringArray(JSONArray array) throws JSONException {
         int length = array.length();
         String[] values = new String[length];
