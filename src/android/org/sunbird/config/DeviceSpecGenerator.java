@@ -295,6 +295,20 @@ public class DeviceSpecGenerator {
     return sb.toString().replace(System.getProperty("line.separator"), " ").replace("Processor	:", "");
   }
 
+  public long getAvailableInternalMemorySize() {
+    File path = Environment.getDataDirectory();
+    StatFs stat = new StatFs(path.getPath());
+    long blockSize, availableBlocks;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+      blockSize = stat.getBlockSizeLong();
+      availableBlocks = stat.getAvailableBlocksLong();
+    } else {
+      blockSize = stat.getBlockSize();
+      availableBlocks = stat.getAvailableBlocks();
+    }
+    return availableBlocks * blockSize;
+  }
+
   private  String bytesToHuman(long size) {
     long Kb = 1 * 1024;
     long Mb = Kb * 1024;

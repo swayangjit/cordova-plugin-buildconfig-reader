@@ -78,6 +78,9 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }else if (action.equalsIgnoreCase("getMetaData")) {
 
             getMetaData(args,callbackContext);
+        }else if (action.equalsIgnoreCase("getAvailableInternalMemorySize")) {
+
+            getAvailableInternalMemorySize(callbackContext);
         }
 
         return false;
@@ -273,6 +276,15 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             }
             callbackContext.success(jsonObject);
 
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+
+    }
+
+    private static void getAvailableInternalMemorySize(CallbackContext callbackContext)  {
+        try {
+            callbackContext.success(String.valueOf(new DeviceSpecGenerator().getAvailableInternalMemorySize()));
         } catch (Exception e) {
             callbackContext.error(e.getMessage());
         }
