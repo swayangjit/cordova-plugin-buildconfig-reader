@@ -44,6 +44,9 @@ var buildconfigreader = {
     },
     getMetaData: function (fileMapList,onSuccess, onError) {
         exec(onSuccess, onError, PLUGIN_NAME, "getMetaData", ["getMetaData",fileMapList]);
+    },
+    getAvailableInternalMemorySize: function (onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "getAvailableInternalMemorySize", ["getAvailableInternalMemorySize"]);
     }
 };
 
