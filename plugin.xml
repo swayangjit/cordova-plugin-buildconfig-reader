@@ -19,12 +19,24 @@
           <param name="onload" value="true" />
         </feature>
       </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="application">
+            <receiver
+            android:name="org.sunbird.utm.ReferrerReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+        </config-file>
+
       <source-file src="src/android/org/sunbird/config/BuildConfigReaderPlugin.java" target-dir="src/org/sunbird/config" />
       <source-file src="src/android/org/sunbird/config/ReflectionUtil.java" target-dir="src/org/sunbird/config" />
       <source-file src="src/android/org/sunbird/config/FileUtil.java" target-dir="src/org/sunbird/config" />
       <source-file src="src/android/org/sunbird/config/BuildConfigUtil.java" target-dir="src/org/sunbird/config" />
       <source-file src="src/android/org/sunbird/config/CryptoUtil.java" target-dir="src/org/sunbird/config" />
       <source-file src="src/android/org/sunbird/config/DeviceSpecGenerator.java" target-dir="src/org/sunbird/config" />
+      <source-file src="src/android/org/sunbird/utm/ReferrerReceiver.java" target-dir="src/org/sunbird/utm" />
 
     </platform>
 

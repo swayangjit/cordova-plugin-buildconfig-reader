@@ -47,6 +47,12 @@ var buildconfigreader = {
     },
     getAvailableInternalMemorySize: function (onSuccess, onError) {
         exec(onSuccess, onError, PLUGIN_NAME, "getAvailableInternalMemorySize", ["getAvailableInternalMemorySize"]);
+    },
+    getUtmInfo: function (onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "getUtmInfo", ["getUtmInfo"]);
+    },
+    clearUtmInfo: function (onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "clearUtmInfo", ["clearUtmInfo"]);
     }
 };
 
