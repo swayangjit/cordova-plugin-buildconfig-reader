@@ -3,6 +3,7 @@ package org.sunbird.config;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.sunbird.utm.ReferrerReceiver;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -81,6 +83,12 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }else if (action.equalsIgnoreCase("getAvailableInternalMemorySize")) {
 
             getAvailableInternalMemorySize(callbackContext);
+        }else if (action.equalsIgnoreCase("getUtmInfo")) {
+
+            getUtmInfo(cordova, callbackContext);
+        }else if (action.equalsIgnoreCase("clearUtmInfo")) {
+
+            clearUtmInfo(cordova, callbackContext);
         }
 
         return false;
@@ -298,5 +306,34 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             values[i] = array.getString(i);
         }
         return values;
+    }
+
+    private static void getUtmInfo(CordovaInterface cordova, CallbackContext callbackContext)  {
+        try {
+            SharedPreferences sharedPreferences = cordova.getActivity().getSharedPreferences(ReferrerReceiver.PREFS_FILE_NAME, Context.MODE_PRIVATE);
+            String utmParameter = sharedPreferences.getString("utm_data", null);
+            if(utmParameter != null) {
+                callbackContext.success(new JSONObject(utmParameter));
+            } else {
+                callbackContext.success("");
+            }
+
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+
+    }
+
+    private static void clearUtmInfo(CordovaInterface cordova, CallbackContext callbackContext)  {
+        try {
+            SharedPreferences sharedPreferences = cordova.getActivity().getSharedPreferences(ReferrerReceiver.PREFS_FILE_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.commit();
+            callbackContext.success();
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+
     }
 }
