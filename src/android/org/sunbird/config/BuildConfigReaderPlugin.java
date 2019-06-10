@@ -89,6 +89,9 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }else if (action.equalsIgnoreCase("clearUtmInfo")) {
 
             clearUtmInfo(cordova, callbackContext);
+        }else if (action.equalsIgnoreCase("getStorageVolumes")) {
+
+            getStorageVolumes(cordova, callbackContext);
         }
 
         return false;
@@ -331,6 +334,15 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             editor.clear();
             editor.commit();
             callbackContext.success();
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+
+    }
+
+    private static void getStorageVolumes(CordovaInterface cordova, CallbackContext callbackContext)  {
+        try {
+            callbackContext.success(StorageUtil.getStorageVolumes(cordova.getContext()));
         } catch (Exception e) {
             callbackContext.error(e.getMessage());
         }

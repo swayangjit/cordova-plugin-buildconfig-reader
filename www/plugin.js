@@ -53,6 +53,9 @@ var buildconfigreader = {
     },
     clearUtmInfo: function (onSuccess, onError) {
         exec(onSuccess, onError, PLUGIN_NAME, "clearUtmInfo", ["clearUtmInfo"]);
+    },
+    getStorageVolumes: function (onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "getStorageVolumes", ["getStorageVolumes"]);
     }
 };
 
