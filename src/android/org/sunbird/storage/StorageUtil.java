@@ -78,11 +78,7 @@ public class StorageUtil {
                 }
                 JSONObject storageVolumeObj = new JSONObject();
                 storageVolumeObj.put("availableSize", availaleSize);
-                if(!removable){
-                    storageVolumeObj.put("totalSize", fmtSpace(getRealisticTotalSize(totalSize)));
-                }else{
-                    storageVolumeObj.put("totalSize", fmtSpace(totalSize));
-                }
+                storageVolumeObj.put("totalSize", fmtSpace(getRealisticTotalSize(totalSize)));
 
                 storageVolumeObj.put("state", state);
                 storageVolumeObj.put("path", path);

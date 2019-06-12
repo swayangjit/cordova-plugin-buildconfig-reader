@@ -92,6 +92,9 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }else if (action.equalsIgnoreCase("getStorageVolumes")) {
 
             getStorageVolumes(cordova, callbackContext);
+        }else if (action.equalsIgnoreCase("copyDirectory")) {
+
+            copyDirectory(args, callbackContext);
         }
 
         return false;
@@ -333,6 +336,18 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             editor.commit();
+            callbackContext.success();
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+
+    }
+
+    private static void copyDirectory(JSONArray args, CallbackContext callbackContext)  {
+        try {
+            String sourceDirectory = args.getString(1);
+            String destinationDirectory = args.getString(2);
+            FileUtil.copyFolder(new File(sourceDirectory), new File(destinationDirectory));
             callbackContext.success();
         } catch (Exception e) {
             callbackContext.error(e.getMessage());

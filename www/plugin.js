@@ -56,6 +56,9 @@ var buildconfigreader = {
     },
     getStorageVolumes: function (onSuccess, onError) {
         exec(onSuccess, onError, PLUGIN_NAME, "getStorageVolumes", ["getStorageVolumes"]);
+    },
+    copyDirectory: function (sourceDirectory, destinationDirectory, onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "copyDirectory", ["copyDirectory",sourceDirectory, destinationDirectory]);
     }
 };
 
