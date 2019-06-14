@@ -98,6 +98,12 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }else if (action.equalsIgnoreCase("renameDirectory")) {
 
             renameDirectory(args, callbackContext);
+        }else if (action.equalsIgnoreCase("canWrite")) {
+
+            canWrite(args, callbackContext);
+        }else if (action.equalsIgnoreCase("getFreeUsableSpace")) {
+
+            getUsableSpace(args, callbackContext);
         }
 
         return false;
@@ -373,6 +379,33 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             String toDirectoryName = args.getString(2);
             FileUtil.renameTo(new File(sourceDirectory), toDirectoryName);
             callbackContext.success();
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+
+    }
+
+     private static void canWrite(JSONArray args, CallbackContext callbackContext)  {
+        try {
+            String directory = args.getString(1);
+            boolean canWrite = new File(directory).canWrite();
+            if(canWrite){
+                callbackContext.success();
+            }else{
+                callbackContext.error("Can't write to the folder"); 
+            }
+           
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+
+    }
+
+    private static void getUsableSpace(JSONArray args, CallbackContext callbackContext)  {
+        try {
+            String directory = args.getString(1);
+            long freeUsableSpace = FileUtil.getFreeUsableSpace(new File(directory));
+            callbackContext.success(String.valueOf(freeUsableSpace));
         } catch (Exception e) {
             callbackContext.error(e.getMessage());
         }

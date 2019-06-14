@@ -120,4 +120,11 @@ public class FileUtil {
 
         oldFile.renameTo(newFile);
     }
+
+    public static long getFreeUsableSpace(File externalFilesDir) {
+        if (externalFilesDir != null) {
+            return externalFilesDir.getUsableSpace();
+        }
+        return 0;
+    }
 }

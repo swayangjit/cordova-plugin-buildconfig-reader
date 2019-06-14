@@ -62,6 +62,12 @@ var buildconfigreader = {
     },
     renameDirectory: function (sourceDirectory, toDirectoryName, onSuccess, onError) {
         exec(onSuccess, onError, PLUGIN_NAME, "renameDirectory", ["renameDirectory",sourceDirectory, toDirectoryName]);
+    },
+    canWrite: function (directory, onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "canWrite", ["canWrite",directory]);
+    },
+    getFreeUsableSpace: function (directory, onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "getFreeUsableSpace", ["getFreeUsableSpace",directory]);
     }
 };
 
