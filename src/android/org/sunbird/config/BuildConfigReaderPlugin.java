@@ -95,6 +95,9 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }else if (action.equalsIgnoreCase("copyDirectory")) {
 
             copyDirectory(args, callbackContext);
+        }else if (action.equalsIgnoreCase("renameDirectory")) {
+
+            renameDirectory(args, callbackContext);
         }
 
         return false;
@@ -363,4 +366,17 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }
 
     }
+
+    private static void renameDirectory(JSONArray args, CallbackContext callbackContext)  {
+        try {
+            String sourceDirectory = args.getString(1);
+            String toDirectoryName = args.getString(2);
+            FileUtil.renameTo(new File(sourceDirectory), toDirectoryName);
+            callbackContext.success();
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+
+    }
+
 }

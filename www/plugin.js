@@ -59,6 +59,9 @@ var buildconfigreader = {
     },
     copyDirectory: function (sourceDirectory, destinationDirectory, onSuccess, onError) {
         exec(onSuccess, onError, PLUGIN_NAME, "copyDirectory", ["copyDirectory",sourceDirectory, destinationDirectory]);
+    },
+    renameDirectory: function (sourceDirectory, toDirectoryName, onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "renameDirectory", ["renameDirectory",sourceDirectory, toDirectoryName]);
     }
 };
 

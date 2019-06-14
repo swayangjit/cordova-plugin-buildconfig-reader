@@ -113,4 +113,11 @@ public class FileUtil {
             }
         }
     }
+
+    public static void renameTo(File sourceDirectory, String toDirectoryName) throws IOException {
+        File oldFile = new File(sourceDirectory, toDirectoryName);
+        File newFile = new File(sourceDirectory, toDirectoryName + "_temp");
+
+        oldFile.renameTo(newFile);
+    }
 }
