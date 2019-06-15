@@ -354,8 +354,8 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
 
     private static void copyDirectory(JSONArray args, CallbackContext callbackContext)  {
         try {
-            String sourceDirectory = args.getString(1);
-            String destinationDirectory = args.getString(2);
+            String sourceDirectory = args.getString(1).replace("file://", "");
+            String destinationDirectory = args.getString(2).replace("file://", "");
             FileUtil.copyFolder(new File(sourceDirectory), new File(destinationDirectory));
             callbackContext.success();
         } catch (Exception e) {
@@ -375,7 +375,7 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
 
     private static void renameDirectory(JSONArray args, CallbackContext callbackContext)  {
         try {
-            String sourceDirectory = args.getString(1);
+            String sourceDirectory = args.getString(1).replace("file://", "");
             String toDirectoryName = args.getString(2);
             FileUtil.renameTo(new File(sourceDirectory), toDirectoryName);
             callbackContext.success();
@@ -387,7 +387,7 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
 
      private static void canWrite(JSONArray args, CallbackContext callbackContext)  {
         try {
-            String directory = args.getString(1);
+            String directory = args.getString(1).replace("file://", "");
             boolean canWrite = new File(directory).canWrite();
             if(canWrite){
                 callbackContext.success();
@@ -403,7 +403,7 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
 
     private static void getUsableSpace(JSONArray args, CallbackContext callbackContext)  {
         try {
-            String directory = args.getString(1);
+            String directory = args.getString(1).replace("file://", "");
             long freeUsableSpace = FileUtil.getFreeUsableSpace(new File(directory));
             callbackContext.success(String.valueOf(freeUsableSpace));
         } catch (Exception e) {
