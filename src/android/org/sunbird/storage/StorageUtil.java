@@ -81,7 +81,7 @@ public class StorageUtil {
                 storageVolumeObj.put("totalSize", fmtSpace(getRealisticTotalSize(totalSize)));
 
                 storageVolumeObj.put("state", state);
-                storageVolumeObj.put("path", path);
+                storageVolumeObj.put("path", "file://"+path+"/");
                 storageVolumeObj.put("isRemovable", removable);
                 storageList.put(storageVolumeObj);
             }
