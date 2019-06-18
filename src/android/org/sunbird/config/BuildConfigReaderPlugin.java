@@ -37,14 +37,7 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             this.getBuildConfigParam(args, callbackContext);
             return true;
         } else if (action.equals("rm")) {
-            try {
-                FileUtil.rm(new File(args.getString(0).replace("file://", "")), args.getString(1));
-                callbackContext.success();
-                return true;
-            } catch (Exception e) {
-                callbackContext.error("Error while deleting");
-                return false;
-            }
+            this.removeDirectory(args, callbackContext);
         } else if (action.equalsIgnoreCase("openPlayStore")) {
             String appId = args.getString(1);
             openGooglePlay(cordova, appId);
@@ -352,18 +345,35 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
 
     }
 
-    private static void copyDirectory(JSONArray args, CallbackContext callbackContext)  {
-        try {
-            String sourceDirectory = args.getString(1).replace("file://", "");
-            String destinationDirectory = args.getString(2).replace("file://", "");
-            FileUtil.copyFolder(new File(sourceDirectory), new File(destinationDirectory));
-            callbackContext.success();
-        } catch (Exception e) {
-            callbackContext.error(e.getMessage());
-        }
-
+    private void removeDirectory(JSONArray args, CallbackContext callbackContext){
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                try {
+                    FileUtil.rm(new File(args.getString(0).replace("file://", "")), args.getString(1));
+                    callbackContext.success();
+                } catch (Exception e) {
+                    callbackContext.error("Error while deleting");
+                }
+            }
+        });
     }
 
+    private void copyDirectory(JSONArray args, CallbackContext callbackContext) {
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                try {
+                    String sourceDirectory = args.getString(1).replace("file://", "");
+                    String destinationDirectory = args.getString(2).replace("file://", "");
+                    FileUtil.copyFolder(new File(sourceDirectory), new File(destinationDirectory));
+                    callbackContext.success();
+                } catch (Exception e) {
+                    callbackContext.error(e.getMessage());
+                }
+            }
+        });
+
+
+    }
     private static void getStorageVolumes(CordovaInterface cordova, CallbackContext callbackContext)  {
         try {
             callbackContext.success(StorageUtil.getStorageVolumes(cordova.getContext()));
