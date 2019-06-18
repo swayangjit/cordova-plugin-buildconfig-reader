@@ -38,6 +38,7 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             return true;
         } else if (action.equals("rm")) {
             this.removeDirectory(args, callbackContext);
+            return true;
         } else if (action.equalsIgnoreCase("openPlayStore")) {
             String appId = args.getString(1);
             openGooglePlay(cordova, appId);
@@ -88,6 +89,7 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }else if (action.equalsIgnoreCase("copyDirectory")) {
 
             copyDirectory(args, callbackContext);
+            return true;
         }else if (action.equalsIgnoreCase("renameDirectory")) {
 
             renameDirectory(args, callbackContext);
