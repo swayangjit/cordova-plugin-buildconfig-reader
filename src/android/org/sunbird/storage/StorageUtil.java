@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.os.storage.StorageManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.os.EnvironmentCompat;
 import android.util.Log;
 
@@ -83,12 +84,28 @@ public class StorageUtil {
                 storageVolumeObj.put("state", state);
                 storageVolumeObj.put("path", "file://"+path+"/");
                 storageVolumeObj.put("isRemovable", removable);
+                String appStorageArea = getAppStorageArea(context, path);
+                if(appStorageArea!= null){
+                    storageVolumeObj.put("contentStoragePath", appStorageArea);
+                }else{
+                    storageVolumeObj.put("contentStoragePath", "file://" + path + "/");
+                }
                 storageList.put(storageVolumeObj);
             }
             Log.i("StorageVolumeList", storageList.toString());
             return storageList;
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static String getAppStorageArea(Context context, String rootDirectoryPath) {
+        File[] dirs = ContextCompat.getExternalFilesDirs(context, null);
+        for (File d : dirs) {
+            String path = d.getPath();
+            if (path.contains(rootDirectoryPath))
+                return "file://" + path + "/";
         }
         return null;
     }
