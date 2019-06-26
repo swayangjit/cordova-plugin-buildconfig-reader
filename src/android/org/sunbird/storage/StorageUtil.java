@@ -90,7 +90,9 @@ public class StorageUtil {
                 }else{
                     storageVolumeObj.put("contentStoragePath", "file://" + path + "/");
                 }
-                storageList.put(storageVolumeObj);
+                if(totalSize > 0){
+                    storageList.put(storageVolumeObj);
+                }
             }
             Log.i("StorageVolumeList", storageList.toString());
             return storageList;
