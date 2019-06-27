@@ -1,4 +1,4 @@
-package org.sunbird.config;
+package org.sunbird.storage;
 
 import android.content.Context;
 import android.os.Build;

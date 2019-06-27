@@ -16,6 +16,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.sunbird.storage.StorageUtil;
 import org.sunbird.utm.ReferrerReceiver;
 
 import java.io.File;
