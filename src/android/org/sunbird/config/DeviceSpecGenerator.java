@@ -47,12 +47,12 @@ public class DeviceSpecGenerator {
       String screenSize = getScreenInfoinInch(activity);
       deviceSpec.put("scrn", !TextUtils.isEmpty(externalMemory) ? Double.valueOf(screenSize) : -1);
 
-      String[] cameraInfo = getCameraInfo(activity);
-      String camera = "";
-      if (cameraInfo != null) {
-        camera = TextUtils.join(",", cameraInfo);
-      }
-      deviceSpec.put("camera", camera);
+      // String[] cameraInfo = getCameraInfo(activity);
+      // String camera = "";
+      // if (cameraInfo != null) {
+      //   camera = TextUtils.join(",", cameraInfo);
+      // }
+      deviceSpec.put("camera", "");
       deviceSpec.put("cpu", getCpuInfo());
       deviceSpec.put("sims", -1);
     } catch (JSONException e) {
