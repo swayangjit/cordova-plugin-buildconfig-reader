@@ -105,9 +105,12 @@ public class StorageUtil {
     private static String getAppStorageArea(Context context, String rootDirectoryPath) {
         File[] dirs = ContextCompat.getExternalFilesDirs(context, null);
         for (File d : dirs) {
-            String path = d.getPath();
-            if (path.contains(rootDirectoryPath))
-                return "file://" + path + "/";
+            if (d != null) {
+                String path = d.getPath();
+                if (path.contains(rootDirectoryPath)) {
+                    return "file://" + path + "/";
+                }
+            }
         }
         return null;
     }
