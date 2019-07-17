@@ -100,6 +100,10 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }else if (action.equalsIgnoreCase("getFreeUsableSpace")) {
 
             getUsableSpace(args, callbackContext);
+        }else if (action.equalsIgnoreCase("readFromAssets")) {
+
+            readFromAssets(args, callbackContext);
+            return true;
         }
 
         return false;
@@ -422,6 +426,28 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         } catch (Exception e) {
             callbackContext.error(e.getMessage());
         }
+
+    }
+
+    private  void readFromAssets(JSONArray args, CallbackContext callbackContext)  {
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                try {
+                    String fileName = args.getString(1).replace("file:///android_asset/","");
+                    String output = FileUtil.readFileFromAssets(cordova.getActivity().getAssets().open(fileName));
+                    if(output != null){
+                        callbackContext.success(output);
+                    }else{
+                        callbackContext.error(0);
+                    }
+
+                } catch (Exception e) {
+                    e.getMessage();
+                    callbackContext.error(e.getMessage());
+                }
+                    
+            }
+        });
 
     }
 

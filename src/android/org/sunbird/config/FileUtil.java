@@ -1,10 +1,12 @@
 package org.sunbird.config;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.LinkedList;
@@ -126,5 +128,43 @@ public class FileUtil {
             return externalFilesDir.getUsableSpace();
         }
         return 0;
+    }
+
+    public static String readFileFromAssets(InputStream fileInputStream) {
+        StringBuilder stringBuilder = new StringBuilder();
+        InputStream fIn = null;
+        InputStreamReader isr = null;
+        BufferedReader input = null;
+        try {
+            fIn = fileInputStream;
+            isr = new InputStreamReader(fIn);
+            input = new BufferedReader(isr);
+            String line = "";
+            while ((line = input.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            return stringBuilder.toString();
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        } finally {
+            try {
+                if (isr != null) {
+                    isr.close();
+                }
+
+                if (fIn != null) {
+                    fIn.close();
+                }
+
+                if (input != null) {
+                    input.close();
+                }
+
+            } catch (Exception e2) {
+                e2.getMessage();
+            }
+        }
+
     }
 }

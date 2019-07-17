@@ -68,6 +68,9 @@ var buildconfigreader = {
     },
     getFreeUsableSpace: function (directory, onSuccess, onError) {
         exec(onSuccess, onError, PLUGIN_NAME, "getFreeUsableSpace", ["getFreeUsableSpace",directory]);
+    },
+    readFromAssets: function (filePath, onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "readFromAssets", ["readFromAssets",filePath]);
     }
 };
 
