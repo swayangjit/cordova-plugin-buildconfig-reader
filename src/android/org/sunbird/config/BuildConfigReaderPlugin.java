@@ -3,6 +3,7 @@ package org.sunbird.config;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -15,6 +16,8 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.sunbird.storage.StorageUtil;
+import org.sunbird.utm.ReferrerReceiver;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,14 +38,8 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             this.getBuildConfigParam(args, callbackContext);
             return true;
         } else if (action.equals("rm")) {
-            try {
-                FileUtil.rm(new File(args.getString(0).replace("file://", "")), args.getString(1));
-                callbackContext.success();
-                return true;
-            } catch (Exception e) {
-                callbackContext.error("Error while deleting");
-                return false;
-            }
+            this.removeDirectory(args, callbackContext);
+            return true;
         } else if (action.equalsIgnoreCase("openPlayStore")) {
             String appId = args.getString(1);
             openGooglePlay(cordova, appId);
@@ -81,6 +78,32 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }else if (action.equalsIgnoreCase("getAvailableInternalMemorySize")) {
 
             getAvailableInternalMemorySize(callbackContext);
+        }else if (action.equalsIgnoreCase("getUtmInfo")) {
+
+            getUtmInfo(cordova, callbackContext);
+        }else if (action.equalsIgnoreCase("clearUtmInfo")) {
+
+            clearUtmInfo(cordova, callbackContext);
+        }else if (action.equalsIgnoreCase("getStorageVolumes")) {
+
+            getStorageVolumes(cordova, callbackContext);
+        }else if (action.equalsIgnoreCase("copyDirectory")) {
+
+            copyDirectory(args, callbackContext);
+            return true;
+        }else if (action.equalsIgnoreCase("renameDirectory")) {
+
+            renameDirectory(args, callbackContext);
+        }else if (action.equalsIgnoreCase("canWrite")) {
+
+            canWrite(args, callbackContext);
+        }else if (action.equalsIgnoreCase("getFreeUsableSpace")) {
+
+            getUsableSpace(args, callbackContext);
+        }else if (action.equalsIgnoreCase("readFromAssets")) {
+
+            readFromAssets(args, callbackContext);
+            return true;
         }
 
         return false;
@@ -299,4 +322,133 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }
         return values;
     }
+
+    private static void getUtmInfo(CordovaInterface cordova, CallbackContext callbackContext)  {
+        try {
+            SharedPreferences sharedPreferences = cordova.getActivity().getSharedPreferences(ReferrerReceiver.PREFS_FILE_NAME, Context.MODE_PRIVATE);
+            String utmParameter = sharedPreferences.getString("utm_data", null);
+            if(utmParameter != null) {
+                callbackContext.success(new JSONObject(utmParameter));
+            } else {
+                callbackContext.success("");
+            }
+
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+
+    }
+
+    private static void clearUtmInfo(CordovaInterface cordova, CallbackContext callbackContext)  {
+        try {
+            SharedPreferences sharedPreferences = cordova.getActivity().getSharedPreferences(ReferrerReceiver.PREFS_FILE_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.commit();
+            callbackContext.success();
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+
+    }
+
+    private void removeDirectory(JSONArray args, CallbackContext callbackContext){
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                try {
+                    FileUtil.rm(new File(args.getString(0).replace("file://", "")), args.getString(1));
+                    callbackContext.success();
+                } catch (Exception e) {
+                    callbackContext.error("Error while deleting");
+                }
+            }
+        });
+    }
+
+    private void copyDirectory(JSONArray args, CallbackContext callbackContext) {
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                try {
+                    String sourceDirectory = args.getString(1).replace("file://", "");
+                    String destinationDirectory = args.getString(2).replace("file://", "");
+                    FileUtil.copyFolder(new File(sourceDirectory), new File(destinationDirectory));
+                    callbackContext.success();
+                } catch (Exception e) {
+                    callbackContext.error(e.getMessage());
+                }
+            }
+        });
+
+
+    }
+    private static void getStorageVolumes(CordovaInterface cordova, CallbackContext callbackContext)  {
+        try {
+            callbackContext.success(StorageUtil.getStorageVolumes(cordova.getContext()));
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+
+    }
+
+    private static void renameDirectory(JSONArray args, CallbackContext callbackContext)  {
+        try {
+            String sourceDirectory = args.getString(1).replace("file://", "");
+            String toDirectoryName = args.getString(2);
+            FileUtil.renameTo(new File(sourceDirectory), toDirectoryName);
+            callbackContext.success();
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+
+    }
+
+     private static void canWrite(JSONArray args, CallbackContext callbackContext)  {
+        try {
+            String directory = args.getString(1).replace("file://", "");
+            boolean canWrite = new File(directory).canWrite();
+            if(canWrite){
+                callbackContext.success();
+            }else{
+                callbackContext.error("Can't write to the folder"); 
+            }
+           
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+
+    }
+
+    private static void getUsableSpace(JSONArray args, CallbackContext callbackContext)  {
+        try {
+            String directory = args.getString(1).replace("file://", "");
+            long freeUsableSpace = FileUtil.getFreeUsableSpace(new File(directory));
+            callbackContext.success(String.valueOf(freeUsableSpace));
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+
+    }
+
+    private  void readFromAssets(JSONArray args, CallbackContext callbackContext)  {
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                try {
+                    String fileName = args.getString(1).replace("file:///android_asset/","");
+                    String output = FileUtil.readFileFromAssets(cordova.getActivity().getAssets().open(fileName));
+                    if(output != null){
+                        callbackContext.success(output);
+                    }else{
+                        callbackContext.error(0);
+                    }
+
+                } catch (Exception e) {
+                    e.getMessage();
+                    callbackContext.error(e.getMessage());
+                }
+                    
+            }
+        });
+
+    }
+
 }

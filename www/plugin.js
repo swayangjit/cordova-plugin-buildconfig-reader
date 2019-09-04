@@ -47,6 +47,30 @@ var buildconfigreader = {
     },
     getAvailableInternalMemorySize: function (onSuccess, onError) {
         exec(onSuccess, onError, PLUGIN_NAME, "getAvailableInternalMemorySize", ["getAvailableInternalMemorySize"]);
+    },
+    getUtmInfo: function (onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "getUtmInfo", ["getUtmInfo"]);
+    },
+    clearUtmInfo: function (onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "clearUtmInfo", ["clearUtmInfo"]);
+    },
+    getStorageVolumes: function (onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "getStorageVolumes", ["getStorageVolumes"]);
+    },
+    copyDirectory: function (sourceDirectory, destinationDirectory, onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "copyDirectory", ["copyDirectory",sourceDirectory, destinationDirectory]);
+    },
+    renameDirectory: function (sourceDirectory, toDirectoryName, onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "renameDirectory", ["renameDirectory",sourceDirectory, toDirectoryName]);
+    },
+    canWrite: function (directory, onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "canWrite", ["canWrite",directory]);
+    },
+    getFreeUsableSpace: function (directory, onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "getFreeUsableSpace", ["getFreeUsableSpace",directory]);
+    },
+    readFromAssets: function (filePath, onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "readFromAssets", ["readFromAssets",filePath]);
     }
 };
 

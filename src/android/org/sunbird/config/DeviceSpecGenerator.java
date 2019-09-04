@@ -39,20 +39,20 @@ public class DeviceSpecGenerator {
       deviceSpec.put("id", getDeviceID(activity));
 
       String internalMemory = bytesToHuman(getTotalInternalMemorySize());
-      deviceSpec.put("idisk", !TextUtils.isEmpty(internalMemory) ? internalMemory : -1);
+      deviceSpec.put("idisk", !TextUtils.isEmpty(internalMemory) ? getDouble(internalMemory) : -1);
 
       String externalMemory = bytesToHuman(getTotalExternalMemorySize());
-      deviceSpec.put("edisk", !TextUtils.isEmpty(externalMemory) ? externalMemory : -1);
+      deviceSpec.put("edisk", !TextUtils.isEmpty(externalMemory) ? getDouble(externalMemory) : -1);
 
       String screenSize = getScreenInfoinInch(activity);
       deviceSpec.put("scrn", !TextUtils.isEmpty(externalMemory) ? Double.valueOf(screenSize) : -1);
 
-      String[] cameraInfo = getCameraInfo(activity);
-      String camera = "";
-      if (cameraInfo != null) {
-        camera = TextUtils.join(",", cameraInfo);
-      }
-      deviceSpec.put("camera", camera);
+      // String[] cameraInfo = getCameraInfo(activity);
+      // String camera = "";
+      // if (cameraInfo != null) {
+      //   camera = TextUtils.join(",", cameraInfo);
+      // }
+      deviceSpec.put("camera", "");
       deviceSpec.put("cpu", getCpuInfo());
       deviceSpec.put("sims", -1);
     } catch (JSONException e) {
@@ -60,6 +60,14 @@ public class DeviceSpecGenerator {
     }
     return deviceSpec;
   }
+
+  private Double getDouble(String value){
+    try{
+       return  Double.valueOf(value);
+    }catch (NumberFormatException e){
+        return 0.0;
+    }
+}
 
   /**
    * Capitalizes the input String
