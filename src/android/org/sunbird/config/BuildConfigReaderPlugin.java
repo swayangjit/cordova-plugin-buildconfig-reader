@@ -454,7 +454,7 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
 
     }
 
-    private static void copyFile(JSONArray args, CallbackContext callbackContext)  {
+    private  void copyFile(JSONArray args, CallbackContext callbackContext)  {
         cordova.getThreadPool().execute(new Runnable() {
             public void run() {
                 try {
