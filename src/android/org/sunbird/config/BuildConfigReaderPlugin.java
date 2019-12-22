@@ -104,6 +104,9 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
 
             readFromAssets(args, callbackContext);
             return true;
+        }else if (action.equalsIgnoreCase("copyFile")) {
+            copyFile(args, callbackContext);
+            return true;
         }
 
         return false;
@@ -451,4 +454,25 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
 
     }
 
+    private  void copyFile(JSONArray args, CallbackContext callbackContext)  {
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                try {
+                    String sourcePath = args.getString(1).replace("file://", "");
+                    String destinationPath = args.getString(2).replace("file://", "");
+                    String fileName = args.getString(3);
+                    File source = new File(sourcePath, fileName);
+                    if (source.exists()) {
+                        File dest = new File(destinationPath, fileName);
+                        dest.getParentFile().mkdirs();
+
+                        FileUtil.cp(source, dest);
+                    }
+                    callbackContext.success();
+                } catch (Exception e) {
+                    callbackContext.error(e.getMessage());
+                }
+            }
+        });
+    }
 }

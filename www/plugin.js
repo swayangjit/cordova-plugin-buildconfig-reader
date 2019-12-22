@@ -71,7 +71,10 @@ var buildconfigreader = {
     },
     readFromAssets: function (filePath, onSuccess, onError) {
         exec(onSuccess, onError, PLUGIN_NAME, "readFromAssets", ["readFromAssets",filePath]);
-    }
+    },
+    copyFile: function (sourceDirectory, destinationDirectory, fileName, onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "copyFile", ["copyDirectory",sourceDirectory, destinationDirectory, fileName]);
+    },
 };
 
 
