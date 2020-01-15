@@ -75,6 +75,9 @@ var buildconfigreader = {
     copyFile: function (sourceDirectory, destinationDirectory, fileName, onSuccess, onError) {
         exec(onSuccess, onError, PLUGIN_NAME, "copyFile", ["copyDirectory",sourceDirectory, destinationDirectory, fileName]);
     },
+    getApkSize: function (onSuccess, onError) {
+        exec(onSuccess, onError, PLUGIN_NAME, "getApkSize", ["getApkSize"]);
+    }
 };
 
 

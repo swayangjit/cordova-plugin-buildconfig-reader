@@ -107,6 +107,9 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
         }else if (action.equalsIgnoreCase("copyFile")) {
             copyFile(args, callbackContext);
             return true;
+        }else if (action.equalsIgnoreCase("getApkSize")) {
+            getApkSize(cordova, callbackContext);
+            return true;
         }
 
         return false;
@@ -243,6 +246,18 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             callbackContext.error("failure");
         }
     }
+
+    private static void getApkSize(final CordovaInterface cordova, final CallbackContext callbackContext) {
+        try {
+            ApplicationInfo app = cordova.getActivity().getApplicationInfo();
+            String filePath = app.sourceDir;
+            File originalApk = new File(filePath);
+            callbackContext.success(String.valueOf(originalApk.length()));
+        } catch (Exception ex) {
+            callbackContext.error(ex.getMessage());
+        }
+    }
+
     private static void createDirectories( JSONArray args, CallbackContext callbackContext)  {
         try {
 
