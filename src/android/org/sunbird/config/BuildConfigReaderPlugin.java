@@ -55,7 +55,7 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             getDownloadDirectoryPath(callbackContext);
 
         }else if (action.equalsIgnoreCase("exportApk")) {
-            exportApk(cordova,callbackContext);
+            exportApk(args, cordova,callbackContext);
 
         }else if (action.equalsIgnoreCase("getBuildConfigValues")) {
 
@@ -200,21 +200,23 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
                 cordova.getActivity().getApplicationInfo().packageName);
     }
 
-    private static void exportApk(final CordovaInterface cordova, final CallbackContext callbackContext) {
-        ApplicationInfo app = cordova.getActivity().getApplicationInfo();
-        String filePath = app.sourceDir;
-        final Intent intent = new Intent(Intent.ACTION_SEND);
-
-        // MIME of .apk is "application/vnd.android.package-archive".
-        // but Bluetooth does not accept this. Let's use "*/*" instead.
-        intent.setType("*/*");
-
-        // Append file
-        File originalApk = new File(filePath);
-
+    private static void exportApk(JSONArray args, final CordovaInterface cordova, final CallbackContext callbackContext) {
         try {
+            String destination = args.getString(1).replace("file://", "");
+            ApplicationInfo app = cordova.getActivity().getApplicationInfo();
+            String filePath = app.sourceDir;
+
+            // Append file
+            File originalApk = new File(filePath);
+
+            File tempFile;
+            if (!TextUtils.isEmpty(destination)) {
+                tempFile = new File(destination);
+            } else {
+                tempFile = new File(cordova.getActivity().getExternalCacheDir() + "/ExtractedApk");
+            }
             // Make new directory in new location
-            File tempFile = new File(cordova.getActivity().getExternalCacheDir() + "/ExtractedApk");
+
             // If directory doesn't exists create new
             if (!tempFile.isDirectory())
                 if (!tempFile.mkdirs())
@@ -222,7 +224,7 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             // Get application's name and convert to lowercase
             tempFile = new File(tempFile.getPath() + "/"
                     + cordova.getActivity().getString(getIdOfResource(cordova, "_app_name", "string")) + "_"
-                    + BuildConfigUtil.getBuildConfigValue("org.sunbird.app", "VERSION_NAME") + ".apk");
+                    + BuildConfigUtil.getBuildConfigValue("org.sunbird.app", "VERSION_NAME").toString().replace(".","_") + ".apk");
             // If file doesn't exists create new
             if (!tempFile.exists()) {
                 if (!tempFile.createNewFile()) {
@@ -243,7 +245,7 @@ public class BuildConfigReaderPlugin extends CordovaPlugin {
             System.out.println("File copied.");
             callbackContext.success(tempFile.getPath());
         } catch (Exception ex) {
-            callbackContext.error("failure");
+            callbackContext.error(ex.getMessage());
         }
     }
 
