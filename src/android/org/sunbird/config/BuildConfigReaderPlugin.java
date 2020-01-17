@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.text.TextUtils;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
