@@ -1,5 +1,7 @@
 package org.sunbird.config;
 
+import android.text.TextUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +11,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 /**
@@ -18,9 +22,13 @@ public class FileUtil {
     public static boolean rm(File fileOrDirectory, String skippDirectory) {
         if (fileOrDirectory.isDirectory()) {
             File[] files = fileOrDirectory.listFiles();
+            List<String> skipDirs = new ArrayList<>();
+            if(!TextUtils.isEmpty(skippDirectory)){
+                skipDirs = Arrays.asList(skippDirectory.split(":"));
+            }
             if (files != null) {
                 for (File child : files) {
-                    if (!skippDirectory.equals(child.getName())) {
+                    if (!skipDirs.contains(child.getName())) {
                         rm(child, skippDirectory);
                     }
                 }
@@ -29,6 +37,7 @@ public class FileUtil {
 
         return fileOrDirectory.delete();
     }
+
 
     public static void write(String path, String fileName, String data) throws IOException {
         File manifestFile = new File(path, fileName);
